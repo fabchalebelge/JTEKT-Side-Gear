@@ -7,23 +7,25 @@ using System.Threading.Tasks;
 
 namespace JTEKT_Side_Gear
 {
-    class I_MR_List<I_MR_Point> : IList<I_MR_Point>
+    class I_MR_List : IList<I_MR_Point>
     {
         //Interface IList
-        public I_MR_Point this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private List<I_MR_Point> _list = new List<I_MR_Point>();
 
-        public int Count => this.Count();
+        public I_MR_Point this[int index] { get => _list[index]; set => _list[index] = value; }
+
+        public int Count { get => _list.Count(); }
 
         public bool IsReadOnly => throw new NotImplementedException();
 
         public void Add(I_MR_Point item)
         {
-            this.Add(item);
+            _list.Add(item);
         }
 
         public void Clear()
         {
-            this.Clear();
+            throw new NotImplementedException();
         }
 
         public bool Contains(I_MR_Point item)
@@ -38,7 +40,7 @@ namespace JTEKT_Side_Gear
 
         public IEnumerator<I_MR_Point> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _list.GetEnumerator();
         }
 
         public int IndexOf(I_MR_Point item)
@@ -67,7 +69,7 @@ namespace JTEKT_Side_Gear
         }
 
         //Spécialisation
-
+        public double AvgI { get => (double)_list.Sum(item => item.I) / _list.Count(); }
 
     }
 }

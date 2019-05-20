@@ -20,8 +20,8 @@ namespace JTEKT_Side_Gear
         private static SqlConnection cnn = new SqlConnection(connectionString);
         private static SqlCommand cmd = cnn.CreateCommand();
         private delegate void SafeCallDelegate(string workOrder, string partNumber, int numOfPiecesOk, int numOfPiecesNok); //Nécessaire pour la mise à jour des labels dans un thread autre que celui dans lequel ils ont été créés
-        private static int numOfPoints = 50;
-        private delegate void DelegateUpdateChart(List<I_MR_Point> yValues);
+        private static int numOfPoints = 10;
+        private delegate void DelegateUpdateChart(I_MR_List yValues);
 
         public Main()
         {
@@ -94,9 +94,7 @@ namespace JTEKT_Side_Gear
                 UpdateInfoProd(workOrder, partNumber, numOfPiecesOk, numOfPiecesNok);
 
                 //Infos charts
-                I_MR_List<I_MR_Point> yValues2 = new I_MR_List<I_MR_Point>();
-                List<I_MR_Point> yValues = new List<I_MR_Point>();
-                I_MR_Point.ClearListOfPoints();
+                
                 cmd.CommandText = "EXECUTE sp_GetListOfDimensions @productionLineId=2;";
                 int id = 0;
                 using (reader = cmd.ExecuteReader())
@@ -115,6 +113,7 @@ namespace JTEKT_Side_Gear
                     }
                 }
 
+                I_MR_List yValues = new I_MR_List();
                 cmd.CommandText = "EXECUTE sp_GetLastMeasurements @n=" + numOfPoints.ToString() + ", @dimensionId=" + id.ToString() + ";";
                 using (reader = cmd.ExecuteReader())
                 {
@@ -122,7 +121,7 @@ namespace JTEKT_Side_Gear
                     while(reader.Read())
                     {
                         I_MR_Point yValue = new I_MR_Point();
-
+                        
                         ind = reader.GetOrdinal("value");
                         try
                         {
@@ -214,7 +213,7 @@ namespace JTEKT_Side_Gear
 
         }
 
-        private void UpdateChart(List<I_MR_Point> yValues)
+        private void UpdateChart(I_MR_List yValues)
         {
             if (chart1.InvokeRequired)
             {
@@ -239,7 +238,7 @@ namespace JTEKT_Side_Gear
                         chart1.Series["Values"].Points.AddY(yValue.I);
                         chart1.Series["TolMin"].Points.AddY(yValue.TolMin);
                         chart1.Series["TolMax"].Points.AddY(yValue.TolMax);
-                        chart1.Series["Avg"].Points.AddY(yValue.AvgI);
+                        chart1.Series["Avg"].Points.AddY(yValues.AvgI);
                         chart1.Series["Target"].Points.AddY(yValue.Target);
                     }
                 }
