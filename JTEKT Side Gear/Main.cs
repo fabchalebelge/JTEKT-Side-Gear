@@ -94,6 +94,7 @@ namespace JTEKT_Side_Gear
                 UpdateInfoProd(workOrder, partNumber, numOfPiecesOk, numOfPiecesNok);
 
                 //Infos charts
+                I_MR_List<I_MR_Point> yValues2 = new I_MR_List<I_MR_Point>();
                 List<I_MR_Point> yValues = new List<I_MR_Point>();
                 I_MR_Point.ClearListOfPoints();
                 cmd.CommandText = "EXECUTE sp_GetListOfDimensions @productionLineId=2;";
