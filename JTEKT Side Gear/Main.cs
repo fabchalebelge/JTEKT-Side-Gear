@@ -19,7 +19,7 @@ namespace JTEKT_Side_Gear
         private static string connectionString = "Data Source=DESKTOP-BCK9KR3\\SQLEXPRESS; Initial Catalog = side_gear; User ID = sidegear; Password = sidegear";
         private static SqlConnection cnn = new SqlConnection(connectionString);
         private static SqlCommand cmd = cnn.CreateCommand();
-        private delegate void SafeCallDelegate(string workOrder, string partNumber, int numOfPiecesOk, int numOfPiecesNok); //Nécessaire pour la mise à jour des labels dans un thread autre que celui dans lequel ils ont été créés
+        private delegate void SafeCallDelegate(string workOrder, int workOrderSize, string partNumber, int numOfPiecesOk, int numOfPiecesNok); //Nécessaire pour la mise à jour des labels dans un thread autre que celui dans lequel ils ont été créés
         private static int numOfPoints = 10;
         private delegate void DelegateUpdateChart(I_MR_List yValues);
 
@@ -53,13 +53,14 @@ namespace JTEKT_Side_Gear
             int ind;
             string workOrder;
             string partNumber;
+            int workOrderSize;
             int numOfPiecesOk;
             int numOfPiecesNok;
 
             while (Thread.CurrentThread.IsAlive)
             {
                 //Infos Work Order
-                cmd.CommandText = "SELECT [workOrder], [partNumber] FROM [ExchangeTable] WHERE [productionLineId] = 2;";
+                cmd.CommandText = "SELECT [workOrder], [partNumber], [workOrderSize] FROM [ExchangeTable] WHERE [productionLineId] = 2;";
                 using (reader = cmd.ExecuteReader())
                 {
                     reader.Read();
@@ -67,6 +68,15 @@ namespace JTEKT_Side_Gear
                     workOrder = reader.GetValue(ind).ToString();
                     ind = reader.GetOrdinal("partNumber");
                     partNumber = reader.GetValue(ind).ToString();
+                    ind = reader.GetOrdinal("workOrderSize");
+                    try
+                    {
+                        workOrderSize = int.Parse(reader.GetValue(ind).ToString());
+                    }
+                    catch
+                    {
+                        workOrderSize = -1;
+                    }                   
                 }
                 cmd.CommandText = "SELECT [numOfPiecesOk], [numOfPiecesNok] FROM [WorkOrder] WHERE [id] = (SELECT [workOrderId] FROM [ExchangeTable] WHERE [productionLineId] = 2);";
                 using (reader = cmd.ExecuteReader())
@@ -91,7 +101,7 @@ namespace JTEKT_Side_Gear
                         numOfPiecesNok = 0;
                     }
                 }
-                UpdateInfoProd(workOrder, partNumber, numOfPiecesOk, numOfPiecesNok);
+                UpdateInfoProd(workOrder, workOrderSize, partNumber, numOfPiecesOk, numOfPiecesNok);
 
                 //Infos charts
                 
@@ -163,22 +173,32 @@ namespace JTEKT_Side_Gear
             
         }
 
-        private void UpdateInfoProd(string workOrder, string partNumber, int numOfPiecesOk, int numOfPiecesNok)
+        private void UpdateInfoProd(string workOrder, int workOrderSize, string partNumber, int numOfPiecesOk, int numOfPiecesNok)
         {
             if (label_WorkOrder.InvokeRequired)
             {
                 var d = new SafeCallDelegate(UpdateInfoProd);
-                Invoke(d, new object[] { workOrder, partNumber, numOfPiecesOk, numOfPiecesNok });
+                Invoke(d, new object[] { workOrder, workOrderSize, partNumber, numOfPiecesOk, numOfPiecesNok });
             }
             else
             {
                 label_WorkOrder.Text = workOrder;
             }
 
+            if (label_Size.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(UpdateInfoProd);
+                Invoke(d, new object[] { workOrder, workOrderSize, partNumber, numOfPiecesOk, numOfPiecesNok });
+            }
+            else
+            {
+                label_Size.Text = workOrderSize.ToString();
+            }
+            
             if (label_PartNumber.InvokeRequired)
             {
                 var d = new SafeCallDelegate(UpdateInfoProd);
-                Invoke(d, new object[] { workOrder, partNumber, numOfPiecesOk, numOfPiecesNok });
+                Invoke(d, new object[] { workOrder, workOrderSize, partNumber, numOfPiecesOk, numOfPiecesNok });
             }
             else
             {
@@ -188,7 +208,7 @@ namespace JTEKT_Side_Gear
             if (label_Ok.InvokeRequired)
             {
                 var d = new SafeCallDelegate(UpdateInfoProd);
-                Invoke(d, new object[] { workOrder, partNumber, numOfPiecesOk, numOfPiecesNok });
+                Invoke(d, new object[] { workOrder, workOrderSize, partNumber, numOfPiecesOk, numOfPiecesNok });
             }
             else
             {
@@ -201,7 +221,7 @@ namespace JTEKT_Side_Gear
             if (label_Nok.InvokeRequired)
             {
                 var d = new SafeCallDelegate(UpdateInfoProd);
-                Invoke(d, new object[] { workOrder, partNumber, numOfPiecesOk, numOfPiecesNok });
+                Invoke(d, new object[] { workOrder, workOrderSize, partNumber, numOfPiecesOk, numOfPiecesNok });
             }
             else
             {
