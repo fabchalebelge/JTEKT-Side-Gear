@@ -31,12 +31,6 @@ namespace JTEKT_Side_Gear
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label_WorkOrder = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -47,8 +41,6 @@ namespace JTEKT_Side_Gear
             this.label_Nok = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label_Size = new System.Windows.Forms.Label();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // label_WorkOrder
@@ -156,57 +148,11 @@ namespace JTEKT_Side_Gear
             this.label_Size.Text = "2400";
             this.label_Size.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // chart1
-            // 
-            chartArea1.AxisX.MajorGrid.Enabled = false;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Location = new System.Drawing.Point(12, 196);
-            this.chart1.Name = "chart1";
-            series1.BorderWidth = 3;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.Red;
-            series1.Name = "TolMin";
-            series2.BorderWidth = 3;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Color = System.Drawing.Color.Red;
-            series2.Name = "TolMax";
-            series3.BorderWidth = 3;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Color = System.Drawing.Color.DarkGray;
-            series3.Name = "Target";
-            series4.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series4.BorderWidth = 3;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Color = System.Drawing.Color.Black;
-            series4.Name = "Avg";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.MarkerBorderColor = System.Drawing.Color.Blue;
-            series5.MarkerColor = System.Drawing.Color.Blue;
-            series5.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series5.Name = "Values";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
-            this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
-            this.chart1.Series.Add(series5);
-            this.chart1.Size = new System.Drawing.Size(988, 300);
-            this.chart1.TabIndex = 10;
-            this.chart1.Text = "chart1";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1015, 620);
-            this.Controls.Add(this.chart1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label_Size);
             this.Controls.Add(this.label5);
@@ -222,7 +168,6 @@ namespace JTEKT_Side_Gear
             this.Text = "JTEKT SG05";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -240,7 +185,6 @@ namespace JTEKT_Side_Gear
         private Label label_Nok;
         private Label label4;
         private Label label_Size;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }
 
