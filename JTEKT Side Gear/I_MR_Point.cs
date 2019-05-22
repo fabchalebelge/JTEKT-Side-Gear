@@ -8,9 +8,9 @@ namespace JTEKT_Side_Gear
 {
     class I_MR_Point
     {
-        public double I { get; set; }
-        public double TolMin { get; set; }
-        public double TolMax { get; set; }
-        public double Target { get { return (this.TolMin + this.TolMax) / 2; } }
+        public decimal I { get; set; }
+        public decimal TolMin { get; set; }
+        public decimal TolMax { get; set; }
+        public decimal Target { get { return (this.TolMin + this.TolMax) / 2; } }
     }
 }

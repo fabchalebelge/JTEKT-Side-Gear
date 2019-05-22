@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data.Common;
 
+using System.Windows.Forms;
+
 namespace JTEKT_Side_Gear
 {
     class SqlDataSet
@@ -31,7 +33,7 @@ namespace JTEKT_Side_Gear
                 List<int> dimensionsIds = new List<int>();
                 DbDataReader reader;
 
-                cmd.CommandText = "EXECUTE sp_GetListOfDimensions @productionLineId=2;";
+                cmd.CommandText = "EXECUTE sp_GetListOfDimensions @productionLineId=" + productionLineId.ToString() + ";";
 
                 using (reader = cmd.ExecuteReader())
                 {
@@ -65,7 +67,7 @@ namespace JTEKT_Side_Gear
                     ind = reader.GetOrdinal("value");
                     try
                     {
-                        yValue.I = double.Parse(reader.GetValue(ind).ToString());
+                        yValue.I = decimal.Parse(reader.GetValue(ind).ToString());
                     }
                     catch
                     {
@@ -75,7 +77,7 @@ namespace JTEKT_Side_Gear
                     ind = reader.GetOrdinal("min");
                     try
                     {
-                        yValue.TolMin = double.Parse(reader.GetValue(ind).ToString());
+                        yValue.TolMin = decimal.Parse(reader.GetValue(ind).ToString());
                     }
                     catch
                     {
@@ -85,7 +87,7 @@ namespace JTEKT_Side_Gear
                     ind = reader.GetOrdinal("max");
                     try
                     {
-                        yValue.TolMax = double.Parse(reader.GetValue(ind).ToString());
+                        yValue.TolMax = decimal.Parse(reader.GetValue(ind).ToString());
                     }
                     catch
                     {
@@ -97,6 +99,168 @@ namespace JTEKT_Side_Gear
                 }
             }
             return yValues;
+        }
+
+        public string PartNumber
+        {
+            get
+            {
+                DbDataReader reader;
+                string partNumber;
+
+                cmd.CommandText = "SELECT[partNumber] FROM [ExchangeTable] WHERE [productionLineId] = " + productionLineId.ToString() + ";";
+
+                using (reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    int ind = reader.GetOrdinal("partNumber");
+                    try
+                    {
+                        partNumber = reader.GetString(ind);
+                    }
+                    catch
+                    {
+                        partNumber = "NA";
+                    }
+                }
+
+                return partNumber;
+            }
+        }
+
+        public string WorkOrder
+        {
+            get
+            {
+                DbDataReader reader;
+                string workOrder;
+
+                cmd.CommandText = "SELECT[workOrder] FROM [ExchangeTable] WHERE [productionLineId] = " + productionLineId.ToString() + ";";
+
+                using (reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    int ind = reader.GetOrdinal("workOrder");
+                    try
+                    {
+                        workOrder = reader.GetString(ind);
+                    }
+                    catch
+                    {
+                        workOrder = "NA";
+                    }
+                }
+
+                return workOrder;
+            }
+        }
+
+        public int WorkOrderSize
+        {
+            get
+            {
+                DbDataReader reader;
+                int workOrderSize;
+
+                cmd.CommandText = "SELECT[workOrderSize] FROM [ExchangeTable] WHERE [productionLineId] = " + productionLineId.ToString() + ";";
+
+                using (reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    int ind = reader.GetOrdinal("workOrderSize");
+                    try
+                    {
+                        workOrderSize = reader.GetInt16(ind);
+                    }
+                    catch
+                    {
+                        workOrderSize = -1;
+                    }
+                }
+
+                return workOrderSize;
+            }
+        }
+
+        public int NumOfPiecesOk
+        {
+            get
+            {
+                DbDataReader reader;
+                int numOfPiecsOk;
+
+                cmd.CommandText = "SELECT [numOfPiecesOk] FROM [WorkOrder] WHERE [id] = (SELECT [workOrderId] FROM [ExchangeTable] WHERE [productionLineId] = " + productionLineId.ToString() + ");";
+
+                using (reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    int ind = reader.GetOrdinal("numOfPiecesOk");
+                    try
+                    {
+                        numOfPiecsOk = reader.GetInt16(ind);
+                    }
+                    catch
+                    {
+                        numOfPiecsOk = -1;
+                    }
+                }
+
+                return numOfPiecsOk;
+            }
+        }
+
+        public int NumOfPiecesNok
+        {
+            get
+            {
+                DbDataReader reader;
+                int numOfPiecsNok;
+
+                cmd.CommandText = "SELECT [numOfPiecesNok] FROM [WorkOrder] WHERE [id] = (SELECT [workOrderId] FROM [ExchangeTable] WHERE [productionLineId] = " + productionLineId.ToString() + ");";
+
+                using (reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    int ind = reader.GetOrdinal("numOfPiecesNok");
+                    try
+                    {
+                        numOfPiecsNok = reader.GetInt16(ind);
+                    }
+                    catch
+                    {
+                        numOfPiecsNok = -1;
+                    }
+                }
+
+                return numOfPiecsNok;
+            }
+        }
+
+        public int PartNumberId
+        {
+            get
+            {
+                DbDataReader reader;
+                int partNumberId;
+
+                cmd.CommandText = "SELECT [partNumberId] FROM [ExchangeTable] WHERE [productionLineId] = " + productionLineId.ToString() + ";";
+
+                using (reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    int ind = reader.GetOrdinal("partNumberId");
+                    try
+                    {
+                        partNumberId = (int)reader.GetValue(ind);
+                    }
+                    catch
+                    {
+                        partNumberId = -1;
+                    }
+                }
+
+                return partNumberId;
+            }
         }
     }
 }

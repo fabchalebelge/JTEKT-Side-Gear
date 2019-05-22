@@ -69,7 +69,34 @@ namespace JTEKT_Side_Gear
         }
 
         //Spécialisation
-        public double AvgI { get => (double)_list.Sum(item => item.I) / _list.Count(); }
+        public decimal AvgI { get => (decimal)_list.Sum(item => item.I) / _list.Count(); }
+
+        public decimal MedI
+        {
+            get
+            {
+                decimal[] temp = _list.Select(item => item.I).ToArray();
+                Array.Sort(temp);
+                int count = temp.Length;
+
+                if (count == 0)
+                {
+                    throw new InvalidOperationException("Empty collection");
+                }
+                else if (count % 2 == 0)
+                {
+                    // count is even, average two middle elements
+                    decimal a = temp[count / 2 - 1];
+                    decimal b = temp[count / 2];
+                    return (a + b) / 2;
+                }
+                else
+                {
+                    // count is odd, return the middle element
+                    return temp[count / 2];
+                }
+            }
+        }
 
     }
 }

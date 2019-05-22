@@ -12,16 +12,14 @@ namespace JTEKT_Side_Gear
 {
     class I_MR_Chart
     {
-        private int pt1;
-        private int pt2;
-
         public Chart chart_I;
         private readonly int index;
         public int DimensionId { get; set; }
 
-        public I_MR_Chart(int index)
+        public I_MR_Chart(int index, int dimensionId)
         {
             this.index = index;
+            this.DimensionId = dimensionId;
             InitializeComponent();           
         }
 
@@ -30,20 +28,20 @@ namespace JTEKT_Side_Gear
             chart_I.Series["Values"].Points.Clear();
             chart_I.Series["TolMin"].Points.Clear();
             chart_I.Series["TolMax"].Points.Clear();
-            chart_I.Series["Avg"].Points.Clear();
+            chart_I.Series["Med"].Points.Clear();
             chart_I.Series["Target"].Points.Clear();
 
             if (yValues.Count > 0)
             {
-                chart_I.ChartAreas[0].AxisY.Minimum = Math.Round(yValues[yValues.Count - 1].TolMin - (yValues[yValues.Count - 1].TolMax - yValues[yValues.Count - 1].TolMin) / 4, 2);
-                chart_I.ChartAreas[0].AxisY.Maximum = Math.Round(yValues[yValues.Count - 1].TolMax + (yValues[yValues.Count - 1].TolMax - yValues[yValues.Count - 1].TolMin) / 4, 2);
+                chart_I.ChartAreas[0].AxisY.Minimum = (double)Math.Round(yValues[yValues.Count - 1].TolMin - (yValues[yValues.Count - 1].TolMax - yValues[yValues.Count - 1].TolMin) / 4, 2);
+                chart_I.ChartAreas[0].AxisY.Maximum = (double)Math.Round(yValues[yValues.Count - 1].TolMax + (yValues[yValues.Count - 1].TolMax - yValues[yValues.Count - 1].TolMin) / 4, 2);
 
                 foreach (I_MR_Point yValue in yValues)
                 {
                     chart_I.Series["Values"].Points.AddY(yValue.I);
                     chart_I.Series["TolMin"].Points.AddY(yValue.TolMin);
                     chart_I.Series["TolMax"].Points.AddY(yValue.TolMax);
-                    chart_I.Series["Avg"].Points.AddY(yValues.AvgI);
+                    chart_I.Series["Med"].Points.AddY(yValues.MedI);
                     chart_I.Series["Target"].Points.AddY(yValue.Target);
                 }
             }
@@ -90,7 +88,7 @@ namespace JTEKT_Side_Gear
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series4.Color = System.Drawing.Color.Black;
-            series4.Name = "Avg";
+            series4.Name = "Med";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series5.MarkerBorderColor = System.Drawing.Color.Blue;
