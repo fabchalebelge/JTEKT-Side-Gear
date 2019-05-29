@@ -77,7 +77,7 @@ namespace JTEKT_Side_Gear
             // label_PartNumber
             // 
             this.label_PartNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label_PartNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_PartNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_PartNumber.Location = new System.Drawing.Point(12, 26);
             this.label_PartNumber.Name = "label_PartNumber";
             this.label_PartNumber.Size = new System.Drawing.Size(258, 53);
@@ -165,6 +165,7 @@ namespace JTEKT_Side_Gear
             this.Controls.Add(this.label_WorkOrder);
             this.Name = "Main";
             this.RightToLeftLayout = true;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "JTEKT SG05";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);

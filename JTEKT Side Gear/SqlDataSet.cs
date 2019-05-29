@@ -101,6 +101,48 @@ namespace JTEKT_Side_Gear
             return yValues;
         }
 
+        public decimal LastValue(int dimensionId)
+        {
+            DbDataReader reader;
+
+            decimal value;
+            bool valid;
+            cmd.CommandText = "SELECT TOP (1) [value], [valid] FROM [Measurement] WHERE [dimensionId] =" + dimensionId.ToString() + " ORDER BY [id] DESC;";
+
+            using (reader = cmd.ExecuteReader())
+            {
+                int ind;
+
+                reader.Read();
+
+                ind = reader.GetOrdinal("value");
+                try
+                {
+                    value = decimal.Parse(reader.GetValue(ind).ToString());
+                }
+                catch
+                {
+                    value = 0;
+                }
+
+                ind = reader.GetOrdinal("valid");
+                try
+                {
+                    valid = bool.Parse(reader.GetValue(ind).ToString());
+                }
+                catch
+                {
+                    valid = false;
+                }
+            }
+
+            LastValueIsOk = valid;
+
+            return value;
+        }
+
+        public bool LastValueIsOk { get; private set; }
+
         public string PartNumber
         {
             get

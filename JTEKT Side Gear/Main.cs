@@ -30,6 +30,7 @@ namespace JTEKT_Side_Gear
         {
             InitializeVariable();
             InitializeComponent();
+            ResizeFormToScreen();
         }
 
         private void InitializeVariable()
@@ -37,8 +38,25 @@ namespace JTEKT_Side_Gear
             productionLineId = 2;
             numOfPoints = 40;
             connexionString = "Data Source=DESKTOP-BCK9KR3\\SQLEXPRESS; Initial Catalog = side_gear; User ID = sidegear; Password = sidegear";
-            sqlDataSet = new SqlDataSet(productionLineId, connexionString, numOfPoints);
+            try
+            {
+                sqlDataSet = new SqlDataSet(productionLineId, connexionString, numOfPoints);
+            }
+            catch
+            {
+                MessageBox.Show("Problème de connexion SQL server. Appeler IE / MAINT");
+                Environment.Exit(1);
+
+            }
             listOfCharts = new List<I_MR_Chart>();
+        }
+
+        private void ResizeFormToScreen()
+        {
+            Rectangle screen = Screen.PrimaryScreen.WorkingArea;
+            this.Location = new Point(0, 0);
+            this.Size = new Size(screen.Width, screen.Height);
+            this.WindowState = FormWindowState.Maximized;
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -64,7 +82,7 @@ namespace JTEKT_Side_Gear
                     AddCharts();
                 }
 
-                //Mise à jour de chaque graphique
+                //Mise à jour de chaque graphique et labels associés
                 foreach (I_MR_Chart chart in listOfCharts)
                 {
                     Update_I_MR_Chart(chart);
@@ -87,12 +105,14 @@ namespace JTEKT_Side_Gear
                 foreach(I_MR_Chart chart in listOfCharts)
                 {
                     this.Controls.Remove(chart.chart_I);
+                    this.Controls.Remove(chart.label_LastValue);
                 }
                 listOfCharts.Clear();
                 foreach (int dimensionId in sqlDataSet.DimensionsIds)
                 {
                     I_MR_Chart myChart = new I_MR_Chart(index, dimensionId);
                     this.Controls.Add(myChart.chart_I);
+                    this.Controls.Add(myChart.label_LastValue);
                     listOfCharts.Add(myChart);
                     index++;
                 }
@@ -156,7 +176,9 @@ namespace JTEKT_Side_Gear
             else
             {
                 I_MR_List yValues = sqlDataSet.Values(chart.DimensionId);
-                chart.UpdateChart(yValues);
+                decimal lastValue = Math.Round(sqlDataSet.LastValue(chart.DimensionId),3);
+                bool lastValueIsOk = sqlDataSet.LastValueIsOk;
+                chart.UpdateChart(yValues, lastValue, lastValueIsOk);
             }
         }
 
